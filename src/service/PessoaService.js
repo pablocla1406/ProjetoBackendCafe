@@ -162,15 +162,20 @@ class PessoaService extends Service {
     try {
       let whereClause = {};
       
-      if (mes && ano) {
-        const startDate = new Date(Date.UTC(ano, mes - 1, 1, 0, 0, 0));
-        const endDate = new Date(Date.UTC(ano, mes, 0, 23, 59, 59, 999));
-        whereClause = {
-          data_compra: {
-            [Op.between]: [startDate, endDate]
-          }
-        };
+      if (!mes || !ano) {
+        const now = new Date();
+        mes = now.getUTCMonth() + 1;
+        ano = now.getUTCFullYear();
       }
+
+      const startDate = new Date(Date.UTC(ano, mes - 1, 1, 0, 0, 0));
+      const endDate = new Date(Date.UTC(ano, mes, 0, 23, 59, 59, 999));
+      
+      whereClause = {
+        data_compra: {
+          [Op.between]: [startDate, endDate]
+        }
+      };
 
       const result = await Pedido.findAll({
         attributes: [
