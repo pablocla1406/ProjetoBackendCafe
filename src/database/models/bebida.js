@@ -20,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     descricao: DataTypes.TEXT,
-    preco: DataTypes.DECIMAL,
+    preco: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
     imagem: {
       type: DataTypes.TEXT,
       allowNull: true
