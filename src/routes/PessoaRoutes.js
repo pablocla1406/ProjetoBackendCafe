@@ -1,11 +1,8 @@
-const PessoaController = require('../controllers/PessoaController')
-const express = require('express')
+const PessoaController = require('../controllers/PessoaController');
+const express = require('express');
 
-const pessoaController = new PessoaController()
-const route = express.Router()
-
-
-
+const pessoaController = new PessoaController();
+const route = express.Router();
 
 /**
  * @swagger
@@ -17,13 +14,7 @@ const route = express.Router()
  *       200:
  *         description: Lista de pessoas retornada com sucesso
  */
-
-route.get('/pessoas', (req, res) => pessoaController.listarTodosPessoas(req, res))
-
-
-
-
-
+route.get('/pessoas', (req, res) => pessoaController.listarTodosPessoas(req, res));
 
 /**
  * @swagger
@@ -48,10 +39,9 @@ route.get('/pessoas', (req, res) => pessoaController.listarTodosPessoas(req, res
  *       500:
  *         description: Erro no servidor
  */
-route.get('/pessoas/tomamMaisCafe', (req, res) => pessoaController.listarPessoasQueMaisTomamCafe(req, res))
+route.get('/pessoas/tomamMaisCafe', (req, res) => pessoaController.listarPessoasQueMaisTomamCafe(req, res));
 
 /**
- * 
  * @swagger
  * /pessoas/listagem:
  *   get:
@@ -61,7 +51,7 @@ route.get('/pessoas/tomamMaisCafe', (req, res) => pessoaController.listarPessoas
  *       200:
  *         description: Lista filtrada de pessoas
  */
-route.get('/pessoas/listagem', (req, res) => pessoaController.listarDadosFiltradosPessoas(req, res))
+route.get('/pessoas/listagem', (req, res) => pessoaController.listarDadosFiltradosPessoas(req, res));
 
 /**
  * @swagger
@@ -75,13 +65,14 @@ route.get('/pessoas/listagem', (req, res) => pessoaController.listarDadosFiltrad
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID da pessoa a ser buscada
  *     responses:
  *       200:
  *         description: Pessoa encontrada
  *       404:
  *         description: Pessoa não encontrada
  */
-route.get('/pessoas/:id', (req, res) => pessoaController.listarIdPessoa(req, res))
+route.get('/pessoas/:id', (req, res) => pessoaController.listarIdPessoa(req, res));
 
 /**
  * @swagger
@@ -90,9 +81,20 @@ route.get('/pessoas/:id', (req, res) => pessoaController.listarIdPessoa(req, res
  *     summary: Atualiza uma pessoa pelo ID
  *     tags: [Pessoas]
  *     parameters:
- * 
- *              id: number
- *              nome:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID da pessoa a ser atualizada
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
  *                 type: string
  *               imagem:
  *                 type: string
@@ -100,17 +102,23 @@ route.get('/pessoas/:id', (req, res) => pessoaController.listarIdPessoa(req, res
  *                 type: string
  *               senha:
  *                 type: string
- *               setor: {
- *                 id: number,
- *                 nome: string
- *               }
+ *               setor:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   nome:
+ *                     type: string
  *               permissao:
- *                 type: Enum
+ *                 type: string
+ *                 enum: [ADMIN, USER, GUEST]
  *     responses:
  *       200:
  *         description: Pessoa atualizada com sucesso
+ *       404:
+ *         description: Pessoa não encontrada
  */
-route.put('/pessoas/:id', (req, res) => pessoaController.atualizarPessoa(req, res))
+route.put('/pessoas/:id', (req, res) => pessoaController.atualizarPessoa(req, res));
 
 /**
  * @swagger
@@ -133,17 +141,21 @@ route.put('/pessoas/:id', (req, res) => pessoaController.atualizarPessoa(req, re
  *                 type: string
  *               senha:
  *                 type: string
- *               setor: {
- *                 id: number,
- *                 nome: string
- *               }
+ *               setor:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   nome:
+ *                     type: string
  *               permissao:
- *                 type: Enum
+ *                 type: string
+ *                 enum: [ADMIN, USER, GUEST]
  *     responses:
  *       201:
  *         description: Pessoa criada com sucesso
  */
-route.post('/pessoas', (req, res) => pessoaController.criarPessoa(req, res))
+route.post('/pessoas', (req, res) => pessoaController.criarPessoa(req, res));
 
 /**
  * @swagger
@@ -157,20 +169,20 @@ route.post('/pessoas', (req, res) => pessoaController.criarPessoa(req, res))
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID da pessoa a ser removida
  *     responses:
  *       200:
  *         description: Pessoa removida com sucesso
  *       404:
  *         description: Pessoa não encontrada
  */
-route.delete('/pessoas/:id', (req, res) => pessoaController.DeletarData(req, res))
-
+route.delete('/pessoas/:id', (req, res) => pessoaController.DeletarData(req, res));
 
 /**
  * @swagger
  * /pessoas/{id}/restore:
  *   patch:
- *     summary: Restaura uma pessoa  
+ *     summary: Restaura uma pessoa
  *     tags: [Pessoas]
  *     parameters:
  *       - in: path
@@ -178,12 +190,13 @@ route.delete('/pessoas/:id', (req, res) => pessoaController.DeletarData(req, res
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID da pessoa a ser restaurada
  *     responses:
  *       200:
  *         description: Pessoa restaurada com sucesso
  *       404:
  *         description: Pessoa não encontrada
  */
-route.patch('/pessoas/:id/restore', (req, res) => pessoaController.restaurarData(req, res))
+route.patch('/pessoas/:id/restore', (req, res) => pessoaController.restaurarData(req, res));
 
-module.exports = route
+module.exports = route;
