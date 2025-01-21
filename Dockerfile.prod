@@ -1,13 +1,17 @@
-# Build
-FROM node:16 AS builder
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Run
 FROM node:16
 WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/build .
-CMD [ "node", "build/index.js" ]
+
+# Copie apenas o package.json primeiro, para otimizar cache de Docker
+COPY package*.json ./
+
+# Instale as dependências
+RUN npm install
+
+# Agora copie o resto dos arquivos
+COPY . .
+
+# Exponha a porta que seu servidor irá rodar
+EXPOSE 3000
+
+CMD ["npm", "start"]
+

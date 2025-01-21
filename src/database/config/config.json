@@ -16,8 +16,8 @@
   },
   "production": {
     "username": "root",
-    "password": "cafezinho",
-    "database": "databasecafe",
+    "password": "prodproject",
+    "database": "bancodadoscafe",
     "host": "db",
     "dialect": "mysql"
   }

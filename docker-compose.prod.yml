@@ -1,10 +1,10 @@
-version: "3.8"
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile.prod
     container_name: node-app-prod
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -17,11 +17,12 @@ services:
   db:
     image: mysql:8.0
     container_name: mysql-db-prod
+    restart: unless-stopped
     ports:
       - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: cafezinho
-      MYSQL_DATABASE: databasecafe
+      MYSQL_ROOT_PASSWORD: prodproject
+      MYSQL_DATABASE: bancodadoscafe
     volumes:
       - db_data:/var/lib/mysql
     networks:
