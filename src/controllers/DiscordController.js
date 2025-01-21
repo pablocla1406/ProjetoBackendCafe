@@ -1,11 +1,11 @@
 const criarImagemRelatorio = require('../utils/discord/CriarImagemRelatorio');
+const FormData = require('form-data');
 
 let fetch;
 
 (async () => {
     fetch = (await import('node-fetch')).default;
 })();
-
 
 class DiscordController {
 
@@ -28,7 +28,10 @@ class DiscordController {
         
         const formData = new FormData();
         formData.append('content', content || '📊 Relatório de Vendas do Café:');
-        formData.append('file', new Blob([imagemBuffer]), 'relatorio.png');
+        formData.append('file', Buffer.from(imagemBuffer), {
+            filename: 'relatorio.png',
+            contentType: 'image/png'
+        });
 
         const response = await fetch(webhookUrl, {
             method: 'POST',

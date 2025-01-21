@@ -14,6 +14,7 @@
     "host": "35.198.52.200",
     "dialect": "mysql"
   },
+  
   "production": {
     "username": "root",
     "password": "prodproject",
