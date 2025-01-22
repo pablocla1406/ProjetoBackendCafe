@@ -16,7 +16,7 @@ class PedidoService extends Service {
         include: include,
         limit,
         offset,
-        order: [['id', 'DESC']]
+        order: [['data_compra', 'DESC']]
       });
 
       const count = await Pedido.count({
