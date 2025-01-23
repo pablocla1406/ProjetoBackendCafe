@@ -8,6 +8,25 @@ class SetorController extends Controller {
         super(setorService);
     }
 
+    async ListarListagemSetores(req, res) {
+        try {
+            const { page = 1, limit = 12 } = req.query;
+
+            const filters = {};
+            const data = await setorService.listarListagemPaginadaSetor(
+                parseInt(page),
+                parseInt(limit),
+                filters
+            );
+            
+            res.status(200).json(data);
+    
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            
+        }
+    }
+
    
 }
 

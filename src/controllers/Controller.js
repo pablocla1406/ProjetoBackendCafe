@@ -73,6 +73,19 @@ class Controller{
         }
     }
 
+    async listarListagemPaginado(req, res){
+        try {
+            const { page = 1, limit = 12 } = req.query;
+
+            const data = await this.service.getPaginated(page, limit);
+            res.status(200).json(data);
+
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            
+        }
+    }
+
 }
 
 module.exports = Controller;

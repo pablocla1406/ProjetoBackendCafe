@@ -176,7 +176,7 @@ route.post('/pessoas', (req, res) => pessoaController.criarPessoa(req, res));
  *       404:
  *         description: Pessoa não encontrada
  */
-route.delete('/pessoas/:id', (req, res) => pessoaController.DeletarData(req, res));
+route.delete('/pessoas/:id', (req, res) => pessoaController.deletarPessoa(req, res));
 
 /**
  * @swagger

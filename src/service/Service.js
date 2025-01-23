@@ -52,14 +52,7 @@ class Service {
     }
 
    
-    async getAllSame(){
-        try {
-            const data = await dataSource[this.model].findAll();
-            return data;
-        } catch (error) {
-            throw new Error(`Error fetching data for ${this.model}: ${error.message}`);
-        }
-    }
+   
 
     async getById(id, options = {}) {
         try {
@@ -102,6 +95,7 @@ class Service {
             throw new Error(`Error deleting data for ${this.model}: ${error.message}`);
         }
     }
+
 
     async restaurarRegistro(id) {
         try {

@@ -27,6 +27,58 @@ const route = express.Router()
  */
 route.get('/setores', (req, res) => setorController.ListarData(req, res))
 
+
+
+
+
+/**
+ * @swagger
+ * /setores/listagem:
+ *   get:
+ *     summary: Lista setores com paginação
+ *     tags: [Setores]
+ *     parameters:
+ *       - in: query
+ *         name: pagina
+ *         schema:
+ *           type: integer
+ *         description: Número da página (iniciando em 1)
+ *       - in: query
+ *         name: itensPorPagina
+ *         schema:
+ *           type: integer
+ *         description: Quantidade de itens por página (padrão: 10)
+ *     responses:
+ *       200:
+ *         description: Lista de setores retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       nome:
+ *                         type: string
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     pagina:
+ *                       type: integer
+ *                     itensPorPagina:
+ *                       type: integer
+ *                     totalItens:
+ *                       type: integer
+ *                     totalPaginas:
+ *                       type: integer
+ */
+route.get('/setores/listagem', (req, res) => setorController.ListarListagemSetores(req, res))
+
 /**
  * @swagger
  * /setores/{id}:

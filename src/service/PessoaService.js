@@ -205,6 +205,24 @@ class PessoaService extends Service {
       throw new Error(`Error fetching pessoas que mais tomam café: ${error.message}`);
     }
   }
+
+  async deletePessoa(id) {
+    try {
+      const pedidosVinculados = await Pedido.findOne({
+        where: {
+          cliente_id: id
+        }
+      });
+
+      if (pedidosVinculados) {
+        throw new Error('Não é possível excluir esta pessoa pois existem pedidos vinculados a ela.');
+      }
+
+      return await Pessoa.destroy({ where: { id } });
+    } catch (error) {
+      throw new Error(`Erro ao excluir pessoa: ${error.message}`);
+    }
+  }
 }
 
 module.exports = PessoaService;

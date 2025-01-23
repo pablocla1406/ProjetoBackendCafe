@@ -159,7 +159,7 @@ route.post('/bebidas', (req, res) => bebidaController.CriarData(req, res))
  *       404:
  *         description: Bebida não encontrada
  */
-route.delete('/bebidas/:id', (req, res) => bebidaController.DeletarData(req, res))
+route.delete('/bebidas/:id', (req, res) => bebidaController.deletarBebida(req, res))
 
 
 /**

@@ -61,6 +61,25 @@ class BebidaService extends Service{
             throw error;
         }
     }
+
+    async deleteBebida(id) {
+        try {
+
+            const pedidosVinculados = await Pedido.findOne({
+                where: {
+                    bebida_id: id
+                }
+            });
+
+            if (pedidosVinculados) {
+                throw new Error('Não é possível excluir esta bebida pois existem pedidos vinculados a ela.');
+            }
+
+            return await Bebida.destroy({ where: { id } });
+        } catch (error) {
+            throw new Error(`Erro ao excluir bebida: ${error.message}`);
+        }
+    }
 }
 
 module.exports = BebidaService;

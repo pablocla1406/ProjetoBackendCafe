@@ -44,6 +44,17 @@ class BebidaController extends Controller{
         }
     }
 
+    async deletarBebida(req, res){
+        try{
+            const {id} = req.params;
+            const data = await this.service.deleteBebida(id);
+            res.status(200).json(data);
+        }
+        catch(error){
+            res.status(500).json({error: error.message});
+        }
+    }
+
     async listarBebidasMaisVendidas(req, res){
         try{
             const {mes, ano} = req.query;
