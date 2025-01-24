@@ -167,6 +167,6 @@ route.post('/setores', (req, res) => setorController.CriarData(req, res))
  *       404:
  *         description: Setor não encontrado
  */
-route.delete('/setores/:id', (req, res) => setorController.DeletarData(req, res))
+route.delete('/setores/:id', (req, res) => setorController.DeletarSetor(req, res))
 
 module.exports = route

@@ -1,6 +1,4 @@
 'use strict';
-const bcrypt = require('bcryptjs');
-
 const {
   Model
 } = require('sequelize');
@@ -15,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     checkPassword(senha) {
-      return bcrypt.compare(senha, this.senha);
+      return this.senha === senha;
     }
   }
 
@@ -52,20 +50,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    hooks: {
-      beforeCreate: async (pessoa, options) => {
-        if (pessoa.senha) {
-          const salt = await bcrypt.genSaltSync(7);
-          pessoa.senha = bcrypt.hashSync(pessoa.senha, salt);
-        }
-      },
-      beforeUpdate: async (pessoa, options) => {
-        if (pessoa.changed('senha')) {
-          const salt = await bcrypt.genSaltSync(7);
-          pessoa.senha = bcrypt.hashSync(pessoa.senha, salt);
-        }
-      }
-    },
     sequelize,
     modelName: 'Pessoa',
     tableName: 'Pessoas',

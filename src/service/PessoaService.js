@@ -215,12 +215,12 @@ class PessoaService extends Service {
       });
 
       if (pedidosVinculados) {
-        throw new Error('Não é possível excluir esta pessoa pois existem pedidos vinculados a ela.');
+        throw new Error('Não é possível excluir esta pessoa, pois existem pedidos vinculados a ela.');
       }
 
       return await Pessoa.destroy({ where: { id } });
     } catch (error) {
-      throw new Error(`Erro ao excluir pessoa: ${error.message}`);
+      throw new Error(`${error.message}`);
     }
   }
 }

@@ -1,5 +1,6 @@
 const Controller = require("./Controller");
 const SetorService = require("../service/SetorService");
+const { where } = require("sequelize");
 
 const setorService = new SetorService();
 
@@ -24,6 +25,16 @@ class SetorController extends Controller {
         } catch (error) {
             res.status(500).json({ error: error.message });
             
+        }
+    }
+
+    async DeletarSetor(req, res) {
+        try {
+            const { id } = req.params;
+            const data = await setorService.deletarSetor(id);
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ error: error.message })  ;
         }
     }
 

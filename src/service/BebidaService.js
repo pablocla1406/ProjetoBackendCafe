@@ -72,12 +72,12 @@ class BebidaService extends Service{
             });
 
             if (pedidosVinculados) {
-                throw new Error('Não é possível excluir esta bebida pois existem pedidos vinculados a ela.');
+                throw new Error('Não é possível excluir esta bebida, pois existem pedidos vinculados a ela.');
             }
 
             return await Bebida.destroy({ where: { id } });
         } catch (error) {
-            throw new Error(`Erro ao excluir bebida: ${error.message}`);
+            throw new Error(`${error.message}`);
         }
     }
 }
