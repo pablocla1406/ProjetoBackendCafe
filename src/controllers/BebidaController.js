@@ -66,6 +66,17 @@ class BebidaController extends Controller{
             res.status(500).json({error: error.message});
         }
     }
+
+    async ativarInativarBebida(req, res){
+        try{
+            const {id} = req.params;
+            const data = await this.service.AtivarOuInativarBebida(id);
+            res.status(200).json(data);
+        }
+        catch(error){
+            res.status(500).json({error: error.message});
+        }
+    }
 }
 
 module.exports = BebidaController;

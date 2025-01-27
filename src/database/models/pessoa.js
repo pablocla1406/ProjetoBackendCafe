@@ -48,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM,
       values: ['USER', 'ADMIN', 'AUX'],
       allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ['Ativo', 'Inativo'],
+      allowNull: false
     }
   }, {
     sequelize,

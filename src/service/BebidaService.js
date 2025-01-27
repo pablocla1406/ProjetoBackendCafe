@@ -80,6 +80,24 @@ class BebidaService extends Service{
             throw new Error(`${error.message}`);
         }
     }
+
+
+    async AtivarOuInativarBebida(id) {
+        try {
+            const bebida = await Bebida.findOne({ where: { id } });
+            if (!bebida) {
+                throw new Error('Bebida não encontrada');
+            }
+
+            bebida.status = bebida.status === 'Ativo' ? 'Inativo' : 'Ativo';
+
+            await bebida.save();
+            return bebida;
+        } catch (error) {
+            throw new Error(`${error.message}`);
+        }
+    }
+
 }
 
 module.exports = BebidaService;

@@ -24,10 +24,19 @@ module.exports = (sequelize, DataTypes) => {
   Pedido.init({
     bebida_id: DataTypes.INTEGER,
     cliente_id: DataTypes.INTEGER,
-    unitario: DataTypes.DECIMAL,
-    total: DataTypes.DECIMAL,
+    unitario: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
+    total: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
+    },
     data_compra: DataTypes.DATE,
-    quantidade: DataTypes.INTEGER
+    quantidade: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Pedido',

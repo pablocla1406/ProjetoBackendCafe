@@ -182,4 +182,9 @@ route.delete('/bebidas/:id', (req, res) => bebidaController.deletarBebida(req, r
  */
 route.patch('/bebidas/:id/restore', (req, res) => bebidaController.restaurarData(req, res))
 
+
+route.patch('/bebidas/:id/ativarouinativar', (req, res) => bebidaController.ativarInativarBebida(req, res))
+
+
+
 module.exports = route
