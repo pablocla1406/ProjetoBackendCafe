@@ -8,46 +8,50 @@ class PedidoService extends Service {
   }
 
   async getListagemPedido(page = 1, limit = 12, filters = {}, include = []) {
-    try {
-      const offset = (page - 1) * limit;
+  try {
+    const offset = (page - 1) * limit;
 
-      const allItems = await this.getAll(filters, null, {
-        attributes: ['id', 'bebida_id', 'cliente_id', 'unitario', 'total', 'data_compra', 'quantidade'],
-        include: include,
-        limit,
-        offset,
-        order: [['data_compra', 'DESC']]
-      });
-
-      const count = await Pedido.count({
-        where: filters,
-        include: include.filter(inc => inc.required)
-      });
-
-      const transformedItems = allItems.map(item => {
-        const plainItem = item.get({ plain: true });
-        return {
-          id: plainItem.id,
-          bebida: plainItem.bebida?.nome || '',
-          cliente: plainItem.cliente?.nome || '',
-          unitario: plainItem.unitario,
-          total: plainItem.total,
-          data_compra: plainItem.data_compra,
-          quantidade: plainItem.quantidade
-        };
-      });
-
-      return {
-        items: transformedItems,
-        totalItems: count,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(count / limit),
-        itemsPerPage: parseInt(limit)
-      };
-    } catch (error) {
-      throw new Error(`Error fetching paginated data for ${this.model}: ${error.message}`);
+    if (!filters['pessoas.status']) {
+      filters['pessoas.status'] = 'Ativo';
     }
+
+    const allItems = await this.getAll(filters, null, {
+      attributes: ['id', 'bebida_id', 'cliente_id', 'unitario', 'total', 'data_compra', 'quantidade'],
+      include: include,
+      limit,
+      offset,
+      order: [['data_compra', 'DESC']]
+    });
+
+    const count = await Pedido.count({
+      where: filters,
+      include: include.filter(inc => inc.required)
+    });
+
+    const transformedItems = allItems.map(item => {
+      const plainItem = item.get({ plain: true });
+      return {
+        id: plainItem.id,
+        bebida: plainItem.bebida?.nome || '',
+        cliente: plainItem.cliente?.nome || '',
+        unitario: plainItem.unitario,
+        total: plainItem.total,
+        data_compra: plainItem.data_compra,
+        quantidade: plainItem.quantidade
+      };
+    });
+
+    return {
+      items: transformedItems,
+      totalItems: count,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(count / limit),
+      itemsPerPage: parseInt(limit)
+    };
+  } catch (error) {
+    throw new Error(`Error fetching paginated data for ${this.model}: ${error.message}`);
   }
+}
 
   async getidPedido(params) {
     try {

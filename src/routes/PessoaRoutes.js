@@ -199,4 +199,10 @@ route.delete('/pessoas/:id', (req, res) => pessoaController.deletarPessoa(req, r
  */
 route.patch('/pessoas/:id/restore', (req, res) => pessoaController.restaurarData(req, res));
 
+route.patch('/pessoas/:id/ativarouinativar', (req, res) => pessoaController.ativarOuInativarPessoa(req, res))
+
+route.patch('/pessoas/:id/atualizafoto', (req, res) => pessoaController.editarFotoPessoa(req, res))
+
+
+
 module.exports = route;

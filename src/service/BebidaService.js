@@ -7,6 +7,16 @@ class BebidaService extends Service{
         super('Bebida');
     }
 
+    async getBebidasAtivas() {
+        try {
+            const whereClause = { status: 'Ativo' };
+            return await Bebida.findAll({ where: whereClause });
+        } catch (error) {
+            throw new Error(`Error fetching bebidas ativas: ${error.message}`);
+        }
+    }
+
+    
     async getListagemBebida(page = 1, limit = 12, filters = {}) {
         const attributes = ['id', 'imagem', 'nome', 'preco', 'status'];
         return await this.getPaginated(page, limit, filters, attributes);

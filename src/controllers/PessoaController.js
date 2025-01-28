@@ -116,6 +116,26 @@ class PessoaController extends Controller {
             res.status(500).json({ error: error.message });
         }
     }
+
+    async editarFotoPessoa(req, res) {
+        try {
+            const { id } = req.params;
+            const imagemUsuario = await this.service.updateFotoPessoa(id, req.body);
+            res.status(200).json(imagemUsuario);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async ativarOuInativarPessoa(req, res) {
+        try {
+            const { id } = req.params;
+            const data = await this.service.ativarInativarPessoa(id);
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 module.exports = PessoaController;

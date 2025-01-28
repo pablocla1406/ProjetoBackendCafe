@@ -15,7 +15,7 @@ const route = express.Router()
  *       200:
  *         description: Lista Bebidas
  */
-route.get('/bebidas', (req, res) => bebidaController.ListarData(req, res))
+route.get('/bebidas', (req, res) => bebidaController.listarBebidasAtivas(req, res))
 
 
 

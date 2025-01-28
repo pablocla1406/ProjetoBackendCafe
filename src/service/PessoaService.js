@@ -34,7 +34,8 @@ class PessoaService extends Service {
           id: plainItem.Setor.id,
           nome: plainItem.Setor.nome
         },
-        permissao: plainItem.permissao
+        permissao: plainItem.permissao,
+        status: plainItem.status
       };
 
     } catch (error) {
@@ -44,7 +45,6 @@ class PessoaService extends Service {
 
   async createPessoa(data) {
     try {
-      // Se receber setor ao invés de setor_id, faz a adaptação
       if (data.setor && !data.setor_id) {
         data.setor_id = data.setor.id || data.setor;
         delete data.setor;
@@ -52,7 +52,6 @@ class PessoaService extends Service {
   
       const novaPessoa = await Pessoa.create(data);
       
-      // Retorna a pessoa criada com os dados do setor
       return this.getByIdPessoa({ id: novaPessoa.id });
     } catch (error) {
       throw new Error(`Erro ao criar pessoa: ${error.message}`);
@@ -61,7 +60,6 @@ class PessoaService extends Service {
 
   async updatePessoa(id, data) {
     try {
-      // Se receber setor ao invés de setor_id, faz a adaptação
       if (data.setor && !data.setor_id) {
         data.setor_id = data.setor.id || data.setor;
         delete data.setor;
@@ -71,17 +69,51 @@ class PessoaService extends Service {
         where: { id }
       });
       
-      // Retorna a pessoa atualizada com os dados do setor
       return this.getByIdPessoa({ id });
     } catch (error) {
       throw new Error(`Erro ao atualizar pessoa: ${error.message}`);
     }
   }
   
+  async updateFotoPessoa(id, imagemUsuario) {
+    try {
+      const pessoa = await Pessoa.findOne({ where: { id } });
+      if (!pessoa) {
+        throw new Error('Pessoa não encontrada');
+      }
+
+      pessoa.imagem = imagemUsuario;
+      await pessoa.save();
+
+      return pessoa;
+    } catch (error) {
+      throw new Error(`Erro ao atualizar pessoa: ${error.message}`);
+    }
+  }
+
+
+  async ativarInativarPessoa(id) {
+    try {
+      const pessoa = await Pessoa.findOne({ where: { id } });
+      if (!pessoa) {
+        throw new Error('Pessoa não encontrada');
+      }
+
+      pessoa.status = pessoa.status === 'Ativo' ? 'Inativo' : 'Ativo';
+      await pessoa.save();
+      return pessoa;
+    } catch (error) {
+      throw new Error(`Erro ao ativar ou inativar pessoa: ${error.message}`);
+    }
+  }
+
 
   async getTodasPessoascomSetor() {
     try {
+
+      const whereClause = { status: 'Ativo' };
       const pessoas = await Pessoa.findAll({
+        where: whereClause,
         include: [{
           model: Setor,
           as: 'Setor',
@@ -102,7 +134,8 @@ class PessoaService extends Service {
           },
           usuario: plainPessoa.usuario,
           senha: plainPessoa.senha,
-          permissao: plainPessoa.permissao
+          permissao: plainPessoa.permissao,
+          status: plainPessoa.status
         };
       });
 
@@ -123,7 +156,7 @@ class PessoaService extends Service {
       }));
 
       const allItems = await this.getAll(filters, null, {
-        attributes: ['id', 'imagem', 'nome', 'setor_id'],
+        attributes: ['id', 'imagem', 'nome', 'setor_id', 'status'],
         include: mergedIncludes,
         limit,
         offset,
@@ -141,7 +174,8 @@ class PessoaService extends Service {
           id: plainItem.id,
           imagem: plainItem.imagem,
           nome: plainItem.nome,
-          setor: plainItem.Setor.nome
+          setor: plainItem.Setor.nome,
+          status: plainItem.status
         };
       });
 
@@ -223,6 +257,9 @@ class PessoaService extends Service {
       throw new Error(`${error.message}`);
     }
   }
+
+
+
 }
 
 module.exports = PessoaService;
