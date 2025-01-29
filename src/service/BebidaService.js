@@ -7,9 +7,13 @@ class BebidaService extends Service{
         super('Bebida');
     }
 
-    async getBebidasAtivas() {
+    async getBebidasAtivas(statusBebida) {
         try {
-            const whereClause = { status: 'Ativo' };
+            if(!statusBebida){
+                statusBebida = 'Ativo'
+            }
+
+            const whereClause = { status: statusBebida };
             return await Bebida.findAll({ where: whereClause });
         } catch (error) {
             throw new Error(`Error fetching bebidas ativas: ${error.message}`);

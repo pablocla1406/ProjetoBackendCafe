@@ -11,9 +11,7 @@ class PedidoService extends Service {
   try {
     const offset = (page - 1) * limit;
 
-    if (!filters['pessoas.status']) {
-      filters['pessoas.status'] = 'Ativo';
-    }
+
 
     const allItems = await this.getAll(filters, null, {
       attributes: ['id', 'bebida_id', 'cliente_id', 'unitario', 'total', 'data_compra', 'quantidade'],

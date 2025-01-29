@@ -74,12 +74,17 @@ class PessoaService extends Service {
       throw new Error(`Erro ao atualizar pessoa: ${error.message}`);
     }
   }
+
   
   async updateFotoPessoa(id, imagemUsuario) {
     try {
       const pessoa = await Pessoa.findOne({ where: { id } });
       if (!pessoa) {
         throw new Error('Pessoa não encontrada');
+      }
+
+      if (!imagemUsuario) {
+        imagemUsuario = null;
       }
 
       pessoa.imagem = imagemUsuario;
@@ -108,10 +113,14 @@ class PessoaService extends Service {
   }
 
 
-  async getTodasPessoascomSetor() {
+  async getTodasPessoascomSetor(statusPessoa) {
     try {
 
-      const whereClause = { status: 'Ativo' };
+      if(!statusPessoa){
+        statusPessoa = 'Ativo'
+      }
+
+      const whereClause = { status: statusPessoa };
       const pessoas = await Pessoa.findAll({
         where: whereClause,
         include: [{

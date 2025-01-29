@@ -1,6 +1,6 @@
 const Controller = require("./Controller");
 const PedidoService = require("../service/PedidoService");
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 const { Bebida, Pessoa } = require('../database/models');
 
 const pedidoService = new PedidoService();
@@ -19,22 +19,29 @@ class PedidoController extends Controller {
                 bebida,
                 id,
                 dataInicio,
-                dataFim
+                dataFim,
+                status = 'Ativo'
             } = req.query;
-            
+
             const filters = {};
             const include = [
                 {
                     model: Bebida,
                     as: 'bebida',
                     attributes: ['nome'],
-                    required: false
+                    required: true,
+                    where: {
+                        status: status
+                    }
                 },
                 {
                     model: Pessoa,
                     as: 'cliente',
                     attributes: ['nome'],
-                    required: false
+                    required: true,
+                    where: {
+                        status: status
+                    }
                 }
             ];
             
@@ -43,15 +50,15 @@ class PedidoController extends Controller {
             }
             
             if (cliente) {
-                include[1].required = true;
                 include[1].where = {
+                    ...include[1].where,
                     nome: { [Op.like]: `%${cliente}%` }
                 };
             }
             
             if (bebida) {
-                include[0].required = true;
                 include[0].where = {
+                    ...include[0].where,
                     nome: { [Op.like]: `%${bebida}%` }
                 };
             }
