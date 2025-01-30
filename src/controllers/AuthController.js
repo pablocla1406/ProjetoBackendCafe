@@ -11,7 +11,7 @@ class AuthController {
 
         try {
             const pessoa = await Pessoa.findOne({ 
-                where: { usuario },
+                where: { usuario, status: 'Ativo' },
                 include: {
                     model: Setor,
                     as: 'Setor',

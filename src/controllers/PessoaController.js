@@ -121,7 +121,8 @@ class PessoaController extends Controller {
     async editarFotoPessoa(req, res) {
         try {
             const { id } = req.params;
-            const imagemUsuario = await this.service.updateFotoPessoa(id, req.body);
+            const { imagem } = req.body;  
+            const imagemUsuario = await this.service.updateFotoPessoa(id, imagem);
             res.status(200).json(imagemUsuario);
         } catch (error) {
             res.status(500).json({ error: error.message });
