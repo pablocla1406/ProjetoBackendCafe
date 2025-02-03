@@ -113,14 +113,12 @@ class PessoaService extends Service {
   }
 
 
-  async getTodasPessoascomSetor(statusPessoa) {
+  async getTodasPessoascomSetor() {
     try {
 
-      if(!statusPessoa){
-        statusPessoa = 'Ativo'
-      }
+      
 
-      const whereClause = { status: statusPessoa };
+      const whereClause = { status: 'Ativo' };
       const pessoas = await Pessoa.findAll({
         where: whereClause,
         include: [{
@@ -158,7 +156,6 @@ class PessoaService extends Service {
     try {
       const offset = (page - 1) * limit;
       
-      // Merge dos includes padrão com os includes recebidos
       const mergedIncludes = include.map(inc => ({
         ...inc,
         required: true

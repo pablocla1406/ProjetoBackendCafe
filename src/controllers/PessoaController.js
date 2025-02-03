@@ -36,8 +36,7 @@ class PessoaController extends Controller {
 
     async listarTodosPessoas(req, res) {
         try {
-            const { statusPessoa } = req.query;
-            const data = await this.service.getTodasPessoascomSetor(statusPessoa);
+            const data = await this.service.getTodasPessoascomSetor();
             res.status(200).json(data);
         } catch (error) {
             res.status(500).json({ error: error.message });

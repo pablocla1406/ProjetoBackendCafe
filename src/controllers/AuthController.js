@@ -34,6 +34,10 @@ class AuthController {
             
             const ordersCount = await pedidoService.getOrdersCountForMonth(pessoa.id);
 
+            const totalGasto = await pedidoService.pegarValorTotalPedidos(pessoa.id);
+
+            const historicoMeses = await pedidoService.historicoUltimosMeses(pessoa.id);
+
             return res.json({
                 pessoa: {
                     id: pessoa.id,
@@ -42,7 +46,9 @@ class AuthController {
                     permissao: pessoa.permissao,
                     setor: pessoa.Setor.nome,
                     imagem: pessoa.imagem,
-                    pedidosNoMes: ordersCount
+                    pedidosTotal: ordersCount,
+                    totalGasto: totalGasto,
+                    historicoUltimosMeses: historicoMeses
                 },
                 token,
                 tipo: `Usuário com permissão: ${pessoa.permissao}`

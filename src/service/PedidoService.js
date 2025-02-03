@@ -216,24 +216,113 @@ class PedidoService extends Service {
     }
   }
 
+
+
   async getOrdersCountForMonth(userId) {
     try {
-      const now = new Date();
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-
       const totalQuantity = await Pedido.sum('quantidade', {
         where: {
-          cliente_id: userId,
-          data_compra: {
-            [Op.between]: [startOfMonth, endOfMonth]
-          }
+          cliente_id: userId
         }
       });
 
       return totalQuantity;
     } catch (error) {
       throw new Error(`Error fetching total quantity: ${error.message}`);
+    }
+  }
+  
+
+  async pegarValorTotalPedidos(userId) {
+    try {
+      const totalValue = await Pedido.sum('total', {
+        where: {
+          cliente_id: userId
+        }
+      });
+      return totalValue;
+    } catch (error) {
+      throw new Error(`Error fetching total value: ${error.message}`);
+    }
+  }
+
+  
+
+ 
+
+
+
+  async historicoUltimosMeses(userId) {
+    try {
+      const now = new Date();
+      const periodoInicial = new Date(now.getFullYear(), now.getMonth() - 2, 1); 
+      const periodoFinal = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+
+      const monthlyStats = await Pedido.findAll({
+        where: {
+          cliente_id: userId,
+          data_compra: {
+            [Op.between]: [periodoInicial, periodoFinal]
+          }
+        },
+        attributes: [
+          [Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m'), 'mesAno'],
+          [Sequelize.fn('SUM', Sequelize.col('total')), 'totalGastoMes'],
+          [Sequelize.fn('SUM', Sequelize.col('quantidade')), 'totalPedidosMes'],
+        ],
+        group: [Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m')],
+        raw: true
+      });
+
+      const bebidasPorMes = await Pedido.findAll({
+        where: {
+          cliente_id: userId,
+          data_compra: {
+            [Op.between]: [periodoInicial, periodoFinal]
+          }
+        },
+        attributes: [
+          [Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m'), 'mesAno'],
+          [Sequelize.fn('COUNT', Sequelize.col('bebida_id')), 'quantidade']
+        ],
+        include: [{
+          model: Bebida,
+          as: 'bebida',
+          attributes: ['nome'],
+          required: true
+        }],
+        group: [
+          Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m'),
+          'bebida_id',
+          'bebida.nome'
+        ],
+        order: [
+          [Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m'), 'DESC'],
+          [Sequelize.fn('SUM', Sequelize.col('Pedido.quantidade')), 'DESC']
+        ],
+        raw: true
+      });
+
+      const historicoMensal = monthlyStats.map(mes => {
+        const bebidasDoMes = bebidasPorMes
+          .filter(bebida => bebida.mesAno === mes.mesAno)
+          .map(bebida => ({
+            nome: bebida['bebida.nome'],
+            quantidade: Number(bebida.quantidade)
+          }))
+          .sort((a, b) => b.quantidade - a.quantidade);
+
+        return {
+          mesAno: mes.mesAno,
+          totalGastoMes: Number(mes.totalGastoMes),
+          totalPedidosMes: Number(mes.totalPedidosMes),
+          bebidasMaisCompradasMes: bebidasDoMes
+        };
+      });
+
+      return historicoMensal;
+    } catch (error) {
+      throw new Error(`Error fetching monthly history: ${error.message}`);
     }
   }
 }

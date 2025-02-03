@@ -82,8 +82,7 @@ class BebidaController extends Controller{
 
     async listarBebidasAtivas(req, res){
         try{
-            const {statusBebida} = req.query;
-            const data = await this.service.getBebidasAtivas(statusBebida);
+            const data = await this.service.getBebidasAtivas();
             res.status(200).json(data);
         }
         catch(error){
