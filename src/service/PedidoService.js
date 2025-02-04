@@ -283,7 +283,7 @@ class PedidoService extends Service {
         },
         attributes: [
           [Sequelize.fn('DATE_FORMAT', Sequelize.col('data_compra'), '%Y-%m'), 'mesAno'],
-          [Sequelize.fn('COUNT', Sequelize.col('bebida_id')), 'quantidade']
+          [Sequelize.fn('SUM', Sequelize.col('quantidade')), 'quantidade']
         ],
         include: [{
           model: Bebida,
@@ -303,22 +303,29 @@ class PedidoService extends Service {
         raw: true
       });
 
-      const historicoMensal = monthlyStats.map(mes => {
-        const bebidasDoMes = bebidasPorMes
-          .filter(bebida => bebida.mesAno === mes.mesAno)
-          .map(bebida => ({
-            nome: bebida['bebida.nome'],
-            quantidade: Number(bebida.quantidade)
-          }))
-          .sort((a, b) => b.quantidade - a.quantidade);
+      const historicoMensal = monthlyStats
+        .map(mes => {
+          const bebidasDoMes = bebidasPorMes
+            .filter(bebida => bebida.mesAno === mes.mesAno)
+            .map(bebida => ({
+              nome: bebida['bebida.nome'],
+              quantidade: Number(bebida.quantidade)
+            }))
+            .sort((a, b) => b.quantidade - a.quantidade);
 
-        return {
-          mesAno: mes.mesAno,
-          totalGastoMes: Number(mes.totalGastoMes),
-          totalPedidosMes: Number(mes.totalPedidosMes),
-          bebidasMaisCompradasMes: bebidasDoMes
-        };
-      });
+          return {
+            mesAno: mes.mesAno,
+            totalGastoMes: Number(mes.totalGastoMes),
+            totalPedidosMes: Number(mes.totalPedidosMes),
+            bebidasMaisCompradasMes: bebidasDoMes
+          };
+        })
+        .sort((a, b) => {
+          const [anoA, mesA] = a.mesAno.split('-').map(Number);
+          const [anoB, mesB] = b.mesAno.split('-').map(Number);
+          if (anoA !== anoB) return anoB - anoA;
+          return mesB - mesA;
+        });
 
       return historicoMensal;
     } catch (error) {

@@ -64,7 +64,7 @@ class PessoaController extends Controller {
             }];
 
             if (id) filters.id = { [Op.like]: `%${id}%` };
-            if (status) filters.status = status;
+            if (status) filters.status = { [Op.like]: `%${status}%` };
             if (nome) filters.nome = { [Op.like]: `%${nome}%` };
             if (setor) {
                 include[0].where = {
