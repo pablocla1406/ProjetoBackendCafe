@@ -28,7 +28,7 @@ class BebidaController extends Controller{
             const filters = {};
             if (id) filters.id = { [Op.like]: `%${id}%` };
             if (nome) filters.nome = { [Op.like]: `%${nome}%` };
-            if (status) filters.status = { [Op.like]: `%${status}%` };
+            if (status) filters.status = status;
 
             const data = await this.service.getListagemBebida(
                 parseInt(page),
