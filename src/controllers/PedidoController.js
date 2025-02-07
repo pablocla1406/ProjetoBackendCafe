@@ -17,10 +17,11 @@ class PedidoController extends Controller {
                 limit = 12, 
                 cliente,
                 bebida,
+                responsavel,
                 id,
                 dataInicio,
                 dataFim,
-                status = 'Ativo'
+                status
             } = req.query;
 
             const filters = {};
@@ -30,18 +31,18 @@ class PedidoController extends Controller {
                     as: 'bebida',
                     attributes: ['nome'],
                     required: true,
-                    where: {
-                        status: status
-                    }
                 },
                 {
                     model: Pessoa,
                     as: 'cliente',
                     attributes: ['nome'],
                     required: true,
-                    where: {
-                        status: status
-                    }
+                },
+                {
+                    model: Pessoa,
+                    as: 'responsavel',
+                    attributes: ['nome'],
+                    required: true
                 }
             ];
             
@@ -60,6 +61,13 @@ class PedidoController extends Controller {
                 include[0].where = {
                     ...include[0].where,
                     nome: { [Op.like]: `%${bebida}%` }
+                };
+            }
+
+            if (responsavel) {
+                include[2].where = {
+                    ...include[2].where,
+                    nome: { [Op.like]: `%${responsavel}%` }
                 };
             }
             

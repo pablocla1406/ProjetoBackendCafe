@@ -14,7 +14,7 @@ class PedidoService extends Service {
 
 
     const allItems = await this.getAll(filters, null, {
-      attributes: ['id', 'bebida_id', 'cliente_id', 'unitario', 'total', 'data_compra', 'quantidade'],
+      attributes: ['id', 'bebida_id', 'cliente_id', 'responsavel_id', 'unitario', 'total', 'data_compra', 'quantidade'],
       include: include,
       limit,
       offset,
@@ -32,6 +32,7 @@ class PedidoService extends Service {
         id: plainItem.id,
         bebida: plainItem.bebida?.nome || '',
         cliente: plainItem.cliente?.nome || '',
+        responsavel: plainItem.responsavel?.nome || '',
         unitario: plainItem.unitario,
         total: plainItem.total,
         data_compra: plainItem.data_compra,
@@ -87,6 +88,7 @@ class PedidoService extends Service {
           id: plainPedido.cliente.id,
           nome: plainPedido.cliente.nome
         },
+        responsavel_id: plainPedido.responsavel_id,
         unitario: plainPedido.unitario,
         total: plainPedido.total,
         data_compra: plainPedido.data_compra,
@@ -131,7 +133,7 @@ class PedidoService extends Service {
       const updateData = {
         ...data,
         bebida_id: data.bebida?.id || data.bebida_id,
-        cliente_id: data.cliente?.id || data.cliente_id
+        cliente_id: data.cliente?.id || data.cliente_id,
       };
 
       delete updateData.bebida;
@@ -218,7 +220,7 @@ class PedidoService extends Service {
 
 
 
-  async getOrdersCountForMonth(userId) {
+  async getPedidosTotal(userId) {
     try {
       const totalQuantity = await Pedido.sum('quantidade', {
         where: {
@@ -331,6 +333,9 @@ class PedidoService extends Service {
     } catch (error) {
       throw new Error(`Error fetching monthly history: ${error.message}`);
     }
+
+
+
   }
 }
 

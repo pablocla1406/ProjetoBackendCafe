@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const md5 = require('md5');
 const { Pessoa, Setor } = require('../database/models');
 const PedidoService = require('../service/PedidoService');
 require('dotenv').config();
@@ -24,7 +25,8 @@ class AuthController {
                 return res.status(401).json({ error: 'Usuário não encontrado' });
             }
 
-            if (!pessoa.checkPassword(senha)) {
+            const senhaHash = md5(senha);
+            if (pessoa.senha !== senhaHash) {
                 return res.status(401).json({ error: 'Senha inválida' });
             }
 
@@ -32,7 +34,7 @@ class AuthController {
                 expiresIn: process.env.JWT_EXPIRATION,
             });
             
-            const ordersCount = await pedidoService.getOrdersCountForMonth(pessoa.id);
+            const pedidosTotal = await pedidoService.getPedidosTotal(pessoa.id);
 
             const totalGasto = await pedidoService.pegarValorTotalPedidos(pessoa.id);
 
@@ -46,7 +48,7 @@ class AuthController {
                     permissao: pessoa.permissao,
                     setor: pessoa.Setor.nome,
                     imagem: pessoa.imagem,
-                    pedidosTotal: ordersCount,
+                    pedidosTotal: pedidosTotal,
                     totalGasto: totalGasto,
                     historicoUltimosMeses: historicoMeses
                 },

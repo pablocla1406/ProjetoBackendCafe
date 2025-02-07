@@ -54,7 +54,6 @@ class PessoaController extends Controller {
                 id
             } = req.query;
             
-            // Construir objeto de filtros
             const filters = {};
             const include = [{
                 model: Setor,

@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'cliente_id',
         as: 'cliente'
       });
+      Pedido.belongsTo(models.Pessoa, {
+        foreignKey: 'responsavel_id',
+        as: 'responsavel'
+      });
       Pedido.belongsTo(models.Bebida, {
         foreignKey: 'bebida_id',
         as: 'bebida'
@@ -24,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   Pedido.init({
     bebida_id: DataTypes.INTEGER,
     cliente_id: DataTypes.INTEGER,
+    responsavel_id: DataTypes.INTEGER,
     unitario: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false
