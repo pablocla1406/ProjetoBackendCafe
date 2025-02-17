@@ -10,6 +10,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'setor_id',
         as: 'Setor'
       });
+    
+      Pessoa.hasMany(models.Pedido, {
+        foreignKey: 'cliente_id',
+        as: 'cliente'
+      });
+    
+      Pessoa.hasMany(models.Pedido, {
+        foreignKey: 'responsavel_id',
+        as: 'responsavel'
+      });
     }
 
     checkPassword(senha) {

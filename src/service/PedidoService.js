@@ -11,8 +11,6 @@ class PedidoService extends Service {
   try {
     const offset = (page - 1) * limit;
 
-
-
     const allItems = await this.getAll(filters, null, {
       attributes: ['id', 'bebida_id', 'cliente_id', 'responsavel_id', 'unitario', 'total', 'data_compra', 'quantidade'],
       include: include,

@@ -21,7 +21,7 @@ class PedidoController extends Controller {
                 id,
                 dataInicio,
                 dataFim,
-                status
+                
             } = req.query;
 
             const filters = {};

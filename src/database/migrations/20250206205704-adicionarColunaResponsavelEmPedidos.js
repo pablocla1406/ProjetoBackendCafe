@@ -10,8 +10,8 @@ module.exports = {
         model: 'Pessoas',
         key: 'id'
       },
-      onUpdate: 'NO ACTION',
-      onDelete: 'NO ACTION'
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE'
     });
   },
 
