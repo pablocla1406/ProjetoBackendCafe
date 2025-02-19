@@ -20,10 +20,8 @@ class DiscordController {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
 
     try {
-        // Lê o conteúdo do arquivo como string
         const fileContent = file.buffer.toString('utf-8');
         
-        // Cria a imagem do relatório
         const imagemBuffer = await criarImagemRelatorio(fileContent);
         
         const formData = new FormData();

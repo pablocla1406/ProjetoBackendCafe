@@ -11,7 +11,6 @@
     "username": "app_user",
     "password": "cafezinho",
     "database": "databasecafe",
-    "host": "35.198.52.200",
     "dialect": "mysql"
   },
   
