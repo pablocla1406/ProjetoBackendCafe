@@ -14,5 +14,5 @@ app.use(express.json());
 // Aplicando as rotas
 routes(app);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server is running on port ${port}, http://localhost:${port}/api-docs`));
