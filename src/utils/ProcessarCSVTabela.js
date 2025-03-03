@@ -34,7 +34,7 @@ function processarCSVTabela(conteudo) {
                 mesAno,
                 cliente,
                 vezesComprou: parseInt(vezesComprou) || 0,
-                valorTotal: parseFloat(valorTotal) || 0
+                valorTotal: parseFloat(valorTotal.replace(',', '.')) || 0
             };
         });
     } catch (error) {
